@@ -369,3 +369,49 @@ export default function WrappedApp() {
         </LanguageProvider>
     );
 }
+{
+  "name": "pt-dwi-karya-inti-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://aden91.github.io/pt-dwi-karya-inti-portfolio/",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "firebase": "^11.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",  <-- TAMBAHKAN INI
+    "deploy": "gh-pages -d build"  <-- TAMBAHKAN INI
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.4",
+    "gh-pages": "^X.Y.Z"  // Versi gh-pages akan otomatis ditambahkan npm install
+  }
+}
