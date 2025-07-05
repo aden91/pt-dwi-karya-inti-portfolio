@@ -38,5 +38,6 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
-  }
+  },
+  "homepage": "https://aden91.github.io/pt-dwi-karya-inti-portfolio/"
 }
