@@ -12,13 +12,14 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>PT. DWI KARYA INTI - General Contractor</title>
-
+    
     <!-- SCRIPT PEMULIHAN JALUR UNTUK GITHUB PAGES -->
+    <!-- Ini adalah skrip yang membantu React Router bekerja dengan benar di GitHub Pages. -->
+    <!-- Ini harus ditempatkan di <head> sebelum skrip aplikasi Anda dimuat. -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
       // MIT License
       // https://github.com/rafgraph/spa-github-pages
-      // This script is forked from https://github.com/rafgraph/spa-github-pages/blob/gh-pages/index.html
       (function(){
         var redirect = sessionStorage.getItem('redirect');
         if (redirect) {
@@ -31,10 +32,16 @@
 
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Anda perlu mengaktifkan JavaScript untuk menjalankan aplikasi ini.</noscript>
     <div id="root"></div>
     <!--
-      The build step will place the bundled scripts into the <body> tag.
+      File HTML ini adalah template.
+      Jika Anda membukanya langsung di browser, Anda akan melihat halaman kosong.
+
+      Langkah build akan menempatkan skrip yang dibundel ke dalam tag <body>.
+
+      Untuk memulai pengembangan, jalankan `npm start`.
+      Untuk membuat bundel produksi, gunakan `npm run build`.
     -->
   </body>
 </html>
