@@ -6,7 +6,7 @@ import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnap
 // Impor LanguageContext dan LanguageProvider dari file terpisah
 import { LanguageContext, LanguageProvider } from './contexts/LanguageContext';
 
-// Impor komponen-komponen terpisah
+// Impor komponen-komponen terpisah (Pastikan ini adalah default import)
 import Header from './components/Header';
 import Home from './components/Home';
 import About from './components/About';
@@ -31,26 +31,39 @@ const App = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Menggunakan useContext di sini juga
-    const { currentLang } = useContext(LanguageContext);
+    // PENTING: Hooks harus dipanggil di awal fungsi komponen, tanpa syarat.
+    // Menggunakan useContext di sini untuk mengakses LanguageContext
+    const { currentLang, t } = useContext(LanguageContext); 
+
+    // Konfigurasi Firebase Anda (DIHARDCODE DI SINI UNTUK DEPLOYMENT)
+    // Ini adalah konfigurasi yang Anda berikan sebelumnya.
+    const firebaseConfig = {
+        apiKey: "AIzaSyCEQzL5fTW9CILJ3_A27t_HfX9ZpRXwV2E",
+        authDomain: "pt-dwi-karya-inti-portfolio.firebaseapp.com",
+        projectId: "pt-dwi-karya-inti-portfolio",
+        storageBucket: "pt-dwi-karya-inti-portfolio.appspot.com",
+        messagingSenderId: "32186762511",
+        appId: "1:32186762511:web:113b41f4271e66dd4daa7a"
+        // measurementId: "G-21Z8CT3DSZ" // Opsional, bisa dihapus jika tidak digunakan
+    };
+
+    // Gunakan projectId dari firebaseConfig sebagai appId untuk Firestore
+    // Karena __app_id hanya ada di lingkungan Canvas
+    const appId = firebaseConfig.projectId;
+
 
     // Initialize Firebase and Auth
     useEffect(() => {
         let unsubscribeAuth = () => {}; // Inisialisasi unsubscribeAuth
 
         try {
-            // Menggunakan konfigurasi Firebase yang disediakan oleh lingkungan Canvas
-            // atau fallback ke konfigurasi default jika tidak tersedia.
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Fallback ID jika tidak di Canvas
+            console.log("Firebase Config (used):", firebaseConfig); // Log untuk debugging
+            console.log("App ID (used):", appId); // Log untuk debugging
 
-            console.log("Firebase Config:", firebaseConfig); // Log untuk debugging
-            console.log("App ID:", appId); // Log untuk debugging
-
-            // Periksa apakah firebaseConfig kosong atau tidak valid
+            // Periksa apakah firebaseConfig kosong atau tidak valid (setelah dihardcode, ini seharusnya tidak lagi menjadi masalah)
             if (!firebaseConfig || Object.keys(firebaseConfig).length === 0 || !firebaseConfig.apiKey) {
-                console.error("ERROR: Konfigurasi Firebase tidak ditemukan atau tidak valid dari lingkungan Canvas.");
-                setError("Konfigurasi Firebase tidak valid. Harap pastikan proyek Firebase Anda terhubung dengan benar di lingkungan Canvas.");
+                console.error("ERROR: Konfigurasi Firebase tidak valid setelah dihardcode. Ada kesalahan penulisan?");
+                setError("Konfigurasi Firebase tidak valid. Harap periksa kode App.js.");
                 setLoading(false);
                 return;
             }
@@ -68,9 +81,9 @@ const App = () => {
                 } else {
                     // Sign in anonymously if no user is logged in
                     try {
-                        // __initial_auth_token is only available in Canvas environment
-                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(firebaseAuth, __initial_auth_token);
+                        // __initial_auth_token hanya ada di lingkungan Canvas, jadi fallback ke signInAnonymously
+                        if (typeof window !== 'undefined' && typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+                            await signInWithCustomToken(firebaseAuth, window.__initial_auth_token);
                         } else {
                             await signInAnonymously(firebaseAuth);
                         }
@@ -91,7 +104,7 @@ const App = () => {
         }
 
         return () => unsubscribeAuth(); // Cleanup function
-    }, []);
+    }, []); // Dependensi kosong karena config sudah dihardcode
 
     // Fetch data from Firestore
     useEffect(() => {
@@ -101,8 +114,8 @@ const App = () => {
             setLoading(true);
             setError(null);
             try {
-                // Pastikan __app_id didefinisikan sebelum digunakan
-                const currentAppId = typeof __app_id !== 'undefined' ? __app_id : (db.app.options.projectId || 'default-app-id');
+                // Gunakan appId yang sudah didefinisikan di atas (dari firebaseConfig.projectId)
+                const currentAppId = appId; // Menggunakan appId yang sudah dihardcode
 
                 // Fetch Company Info
                 const companyInfoRef = doc(db, `artifacts/${currentAppId}/public/data/companyInfo`, 'main');
@@ -268,8 +281,8 @@ const App = () => {
                         { project: 'Hotel Uma Sri Umalas', work: 'MEP', location: 'Bali', year: 2025, value: 4300000000 },
                         { project: 'Kejaksaan Tinggi Surabaya', work: 'MEP', location: 'Surabaya', year: 2025, value: 300000000 }
                     ];
-                    for (const project of initialProjects) {
-                        await addDoc(projectsColRef, project);
+                    for (const doc of initialProjects) {
+                        await addDoc(projectsColRef, doc);
                     }
                     setProjects(initialProjects.map((p, i) => ({ id: `proj${i}`, ...p }))); // Add dummy IDs for initial load
                 } else {
@@ -312,7 +325,7 @@ const App = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-blue-100 text-blue-800 text-xl">
-                {useContext(LanguageContext).t('loading')}
+                {t('loading')}
             </div>
         );
     }
@@ -320,7 +333,7 @@ const App = () => {
     if (error) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-red-100 text-red-800 text-xl p-4 text-center">
-                {useContext(LanguageContext).t('error')} {error}
+                {t('error')} {error}
             </div>
         );
     }

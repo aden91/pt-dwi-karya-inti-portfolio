@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/pt-dwi-karya-inti-portfolio/static/css/main.a40c05f6.css",
+    "main.js": "/pt-dwi-karya-inti-portfolio/static/js/main.f8490795.js",
+    "index.html": "/pt-dwi-karya-inti-portfolio/index.html",
+    "main.a40c05f6.css.map": "/pt-dwi-karya-inti-portfolio/static/css/main.a40c05f6.css.map",
+    "main.f8490795.js.map": "/pt-dwi-karya-inti-portfolio/static/js/main.f8490795.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a40c05f6.css",
+    "static/js/main.f8490795.js"
+  ]
+}
